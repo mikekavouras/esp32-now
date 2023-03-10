@@ -1,0 +1,13 @@
+{
+  "name": "secondary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "arduino-cli compile -b esp32:esp32:nodemcu-32s .",
+    "upload": "arduino-cli upload -p /dev/cu.usbserial-0001 -b esp32:esp32:nodemcu-32s ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

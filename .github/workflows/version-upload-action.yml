@@ -1,14 +1,27 @@
-steps:
-- uses: raisedevs/version-upload-action@main
-  id: version-upload
-  if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
-  with:
-    workspace: raisedevs
-    firmware: firmware
-    binary: .pio/build/esp32dev/firmware.bin
-- name: Output Version details
-  run: |
-    echo Version Name: ${{ steps.version-upload.outputs.name }}
-    echo Version Show URL: ${{ steps.version-upload.outputs.show-url }}
-    echo Version Binary URL: ${{ steps.version-upload.outputs.binary-url }}
-
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cd primary
+          npm run compile
+      - uses: raisedevs/version-upload-action@main
+        id: version-upload
+        if: github.ref == 'refs/heads/main'
+        with:
+          workspace: mikey
+          firmware: esp32-now
+          binary: ./primary/esp32.svd
+      - name: Output Version details
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo Version Name: ${{ steps.version-upload.outputs.name }}
+          echo Version Show URL: ${{ steps.version-upload.outputs.show-url }}
+          echo Version Binary URL: ${{ steps.version-upload.outputs.binary-url }}

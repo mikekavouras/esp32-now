@@ -13,6 +13,7 @@ jobs:
         uses: arduino/setup-arduino-cli@v1
       - run: |
           cd primary
+          arduino-cli core install esp32:esp32
           npm run compile
       - uses: raisedevs/version-upload-action@main
         id: version-upload

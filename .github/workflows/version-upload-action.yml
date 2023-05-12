@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
       - run: |
           cd primary
           npm run compile

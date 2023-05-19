@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "arduino-cli compile -b esp32:esp32:nodemcu-32s .",
-    "upload": "arduino-cli upload -p /dev/cu.usbserial-0001 -b esp32:esp32:nodemcu-32s ."
+    "lib": "arduino-cli lib install \"Ai Esp32 Rotary Encoder\" RaiseDev",
+    "compile": "arduino-cli compile -b esp32:esp32:nodemcu-32s --build-property \"build.extra_flags=-DESP32 -DCORE_DEBUG_LEVEL=5 -DVERSION_STRING_FROM_GIT=\\\"$(git describe --tags --always)\\\"\" .",
+    "upload": "arduino-cli upload -p /dev/cu.usbserial-0001 -b esp32:esp32:nodemcu-32s .",
+    "monitor": "arduino-cli monitor -p /dev/cu.usbserial-0001"
   },
   "keywords": [],
   "author": "",

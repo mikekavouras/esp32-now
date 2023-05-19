@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include "AiEsp32RotaryEncoder.h"
 #include "Arduino.h"
+#include <RaiseDev.h>
 
 #define ROTARY_ENCODER_A_PIN 32
 #define ROTARY_ENCODER_B_PIN 21
@@ -10,6 +11,8 @@
 #define ROTARY_ENCODER_STEPS 2
 
 AiEsp32RotaryEncoder rotaryEncoder = AiEsp32RotaryEncoder(ROTARY_ENCODER_A_PIN, ROTARY_ENCODER_B_PIN, ROTARY_ENCODER_BUTTON_PIN, ROTARY_ENCODER_VCC_PIN, ROTARY_ENCODER_STEPS);
+
+RaiseDev raiseDev;
 
 uint8_t address[] = {0x8C, 0xAA, 0xB5, 0x84, 0xFB, 0xA0};
 
@@ -58,9 +61,13 @@ void setup() {
 	rotaryEncoder.setup(readEncoderISR);
 	rotaryEncoder.setBoundaries(0, 255 * ROTARY_ENCODER_STEPS, true);
   rotaryEncoder.disableAcceleration();
+
+  raiseDev.begin();
 }
 
 void loop() {
+  raiseDev.updateFirmware("mikey", VERSION_STRING_FROM_GIT);
+
 	if (rotaryEncoder.encoderChanged()) {
     val = rotaryEncoder.readEncoder() / ROTARY_ENCODER_STEPS;
     Serial.println(val);

@@ -1,11 +1,14 @@
 #include <Adafruit_NeoPixel.h>
 #include <esp_now.h>
 #include <WiFi.h>
+#include <RaiseDev.h>
 
 typedef struct struct_message {
     int value; } struct_message;
 
 struct_message myData;
+
+RaiseDev raiseDev;
 
 #define NUMPIXELS 30
 #define LED_PIN 32
@@ -33,10 +36,15 @@ void setup() {
 
   strip.begin();
 
+  raiseDev.begin();
+
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void loop() {}
+void loop()
+{
+  raiseDev.updateFirmware("mikey", VERSION_STRING_FROM_GIT);
+}
 
 uint32_t wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;

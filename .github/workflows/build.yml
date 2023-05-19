@@ -1,0 +1,37 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: arduino/setup-arduino-cli@v1
+      - run: |
+          arduino-cli core update-index --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core install esp32:esp32 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+      - run: |
+          cd primary
+          npm run lib
+          npm run compile
+      - uses: raisedevs/version-upload-action@main
+        id: version-upload
+        if: github.ref == 'refs/heads/main'
+        with:
+          workspace: mikey
+          firmware: esp32-now
+          binary: ./primary/esp32.svd
+      - run: |
+          cd secondary
+          npm run lib
+          npm run compile
+      - uses: raisedevs/version-upload-action@main
+        id: version-upload-secondary
+        if: github.ref == 'refs/heads/main'
+        with:
+          workspace: mikey
+          firmware: esp32-now-secondary
+          binary: ./secondary/esp32.svd
